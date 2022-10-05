@@ -1,0 +1,10 @@
+---
+- name: Configure devbox
+  hosts: localhost
+
+  tasks:
+  - name: Install Terraform
+    snap:
+      name: terraform
+      state: present
+      classic: true
