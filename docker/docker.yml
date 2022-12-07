@@ -1,0 +1,17 @@
+version: '3.3'
+
+services:
+  asterisk:
+    image: asterisk:13-alpine
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "5060:5060/udp"
+      - "10000-10100:10000-10100/udp"
+    volumes:
+      - ./config:/etc/asterisk
+      - ./sounds:/var/lib/asterisk/sounds
+      - ./storage:/var/spool/asterisk
+

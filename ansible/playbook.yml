@@ -1,0 +1,31 @@
+---
+- name: Configure devbox
+  hosts: localhost
+
+  tasks:
+  - name: Install Terraform
+    snap:
+      name: terraform
+      state: present
+      classic: true
+
+    - name: Update the apt package index
+      apt:
+        update_cache: true
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Install Docker Compose
+      apt:
+        name: docker-compose
+        state: present
+
+    - name: Initialize Docker Swarm
+      command: docker swarm init
+
+    - name: Deploy Docker stack
+      command: docker stack deploy -c /path/to/docker-compose.yml my_stack
+
