@@ -1,0 +1,1 @@
+Write me a complete infrastructure for Digital Ocean using Terraform, where the region is located close to Seattle, the droplet runs ubuntu 20.04, there is no managed database, the droplet count is 1, the size of the droplet is as small as possible,  and create every possible monitoring alert for this instance.
