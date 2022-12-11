@@ -24,8 +24,11 @@ resource "digitalocean_droplet" "web" {
 
   user_data = <<-EOF
   #!/bin/bash
-  echo "Hello, World!" > index.html
-  nohup busybox httpd -f -p 8080 &
+  git clone https://github.com/jaycubb/sacav.git
+  cd sacav
+  apt update
+  apt install ansible -y
+  ansible-playbook playbook.yml
   EOF
 
   monitoring = true  # <-- enable monitoring for the compute instance
