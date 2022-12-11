@@ -3,3 +3,5 @@ Write me a complete infrastructure for Digital Ocean using Terraform, where the 
 Write a docker-swarm config for an Asterisk VOIP container
 
 Write an Ansible playbook that installs everything required to run dockerswarm on Ubuntu 20.04. The ansible playbook should also deploy a docker stack.
+
+Write me  HTML that uses Bootstrap. The HTML is a homepage. Give the CSS the feel of a village pasture.

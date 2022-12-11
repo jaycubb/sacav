@@ -1,6 +1,13 @@
 version: '3.3'
 
 services:
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile_nginx
+    ports:
+      - "80:80"
   asterisk:
     image: asterisk:13-alpine
     deploy:
