@@ -1,16 +1,15 @@
+terraform {
+  required_providers {
+    digitalocean = {
+      source = "digitalocean/digitalocean"
+      version = "~> 2.0"
+    }
+  }
+}
+variable "do_token" {}
+
 provider "digitalocean" {
-  token = "{{ lookup('env', 'DO_API_TOKEN') }}"
-}
-
-resource "digitalocean_loadbalancer" "lb" {
-  name       = "web-lb"
-  region     = "sea1"  # <-- specify region near Seattle
-  droplet_ids = ["${digitalocean_droplet.web.*.id}"]
-}
-
-resource "digitalocean_vpc" "vpc" {
-  name = "web-vpc"
-  region = "sea1"  # <-- specify region near Seattle
+  token = var.do_token
 }
 
 resource "digitalocean_droplet" "web" {
@@ -18,8 +17,8 @@ resource "digitalocean_droplet" "web" {
 
   image  = "ubuntu-20-04-x64"  # <-- specify Ubuntu 20.04
   name   = "web-server-${count.index}"
-  region = "sea1"  # <-- specify region near Seattle
-  size   = "s-1vcpu-512mb"  # <-- specify smallest possible size
+  region = "sfo3"  # <-- specify region near Seattle
+  size   = "s-1vcpu-1gb"  # <-- specify smallest possible size
   vpc_uuid = digitalocean_vpc.vpc.id
 
   user_data = <<-EOF
@@ -34,9 +33,28 @@ resource "digitalocean_droplet" "web" {
   monitoring = true  # <-- enable monitoring for the compute instance
 }
 
+resource "digitalocean_loadbalancer" "lb" {
+  name       = "web-lb"
+  region     = "sfo3"  # <-- specify region near Seattle
+  droplet_ids = digitalocean_droplet.web.*.id
+  vpc_uuid = digitalocean_vpc.vpc.id
+  forwarding_rule {
+    entry_port = 80
+    entry_protocol = "tcp"
+    target_port = 80
+    target_protocol = "tcp"
+  }
+}
+
+resource "digitalocean_vpc" "vpc" {
+  name = "sacav-vpc"
+  region = "sfo3"  # <-- specify region near Seattle
+}
+
+
 #resource "digitalocean_monitoring_alert_policy" "policy" {
 #  name   = "web-alert-policy"
-#  region = "sea1"  # <-- specify region near Seattle
+#  region = "sfo3"  # <-- specify region near Seattle
 #
 #  # create alerts for every possible metric
 #  alert_rules = [
